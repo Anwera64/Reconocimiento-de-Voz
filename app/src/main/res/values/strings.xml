@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Voice Recognition</string>
+
+    <!-- Button texts -->
+    <string name="listening">Esuchando…</string>
+    <string name="start_talking">Empieza a hablar</string>
+    <string name="stop">Parar</string>
+    <string name="couldnt_recognize">No se pudo reconocer la voz</string>
+    <string name="need_permissions">Necesito Persmisos</string>
 </resources>
