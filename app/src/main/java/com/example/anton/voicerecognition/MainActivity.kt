@@ -10,11 +10,13 @@ import android.speech.SpeechRecognizer
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    var recognizedTexts = ArrayList<ArrayList<String>>()
     var speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,9 @@ class MainActivity : AppCompatActivity() {
                 // the value 527)
             }
         }
+
+        rvPastTexts.layoutManager = LinearLayoutManager(this)
+        rvPastTexts.adapter = RecognizedAdapter(recognizedTexts, this)
 
         prepareVoiceRecognition()
 
@@ -101,19 +106,18 @@ class MainActivity : AppCompatActivity() {
                         textOutput.setText(getString(R.string.need_permissions))
                     }
                 }
-             }
+            }
 
             override fun onResults(results: Bundle?) {
                 Log.v("Main", "Results")
                 var text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                if (text != null) {
-                    for (t in text) {
-                        Log.v("Main", t)
-                    }
-                    textOutput.setText(text[0])
-                }
+                val texts = text?.let { it } ?: return
+                val normalTexts = ArrayList<String>()
+                normalTexts.addAll(texts)
+                textOutput.setText(text[0])
+                recognizedTexts.add(normalTexts)
+                rvPastTexts.adapter.notifyDataSetChanged()
             }
-
         })
     }
 }
